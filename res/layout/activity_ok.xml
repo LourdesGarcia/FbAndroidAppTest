@@ -54,6 +54,12 @@
         android:layout_height="wrap_content"
         android:text="Post Graph Api" />
 
+    <Button
+        android:id="@+id/goToHtml"
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        android:text="Go to HTML" />
+
     <TextView
         android:id="@+id/userInfoTextView"
         android:layout_width="281dp"

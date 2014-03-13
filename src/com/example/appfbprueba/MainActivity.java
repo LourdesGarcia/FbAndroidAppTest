@@ -1,6 +1,10 @@
 package com.example.appfbprueba;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -13,12 +17,15 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -68,7 +75,9 @@ public class MainActivity extends FragmentActivity  {
 	 private Button graphApiUserButton;
 	 private Button postGraphApiDialog;
 	 private Button postPhoto;
+	 private Button goToHtmlButton;
 	 private TextView userInfoTextView;
+
 	 
 	 private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -180,6 +189,12 @@ public class MainActivity extends FragmentActivity  {
 		                    postPhoto.setOnClickListener(new View.OnClickListener() {
 		                        public void onClick(View view) {
 		                        	postPhotoDialog();
+		                        }
+		                    });
+		                    goToHtmlButton= (Button) findViewById(R.id.goToHtml); 
+		                    goToHtmlButton.setOnClickListener(new View.OnClickListener() {
+		                        public void onClick(View view) {
+		                        	goToHtmlDialog();
 		                        }
 		                    });
 	                    }else{
@@ -443,6 +458,37 @@ public class MainActivity extends FragmentActivity  {
 		RequestAsyncTask task = new RequestAsyncTask(request);
 		task.execute();   
     }
+    
+    
+    private void goToHtmlDialog(){
+    	//TODO	
+    	AssetManager assetManager = getAssets();
+    	 InputStream input;
+         try {
+             input = assetManager.open("prueba.html");
+  
+              int size = input.available();
+              byte[] buffer = new byte[size];
+              input.read(buffer);
+              input.close();
+  
+              // byte buffer into a string
+              String text = new String(buffer);
+           //   Document doc = Jsoup.parse(input, "UTF-8", "");
+
+              Log.i("texto",text.toString());
+         } catch (IOException e) {
+             // TODO Auto-generated catch block
+             e.printStackTrace();
+         }
+  
+    	//Log.i(TAG,"hola");
+    	////Document doc = Jsoup.connect("http://en.wikipedia.org/").get();
+    	//File input = new File("/assets/prueba.html");
+    	//Log.i("archivo_html", input.toString());
+    	//Document doc = Jsoup.parse(input, "UTF-8");
+    }
+    
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
