@@ -17,8 +17,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -30,6 +28,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -465,7 +464,7 @@ public class MainActivity extends FragmentActivity  {
     	AssetManager assetManager = getAssets();
     	 InputStream input;
          try {
-             input = assetManager.open("prueba.html");
+             input = assetManager.open("www/prueba.html");
   
               int size = input.available();
               byte[] buffer = new byte[size];
@@ -474,9 +473,11 @@ public class MainActivity extends FragmentActivity  {
   
               // byte buffer into a string
               String text = new String(buffer);
-           //   Document doc = Jsoup.parse(input, "UTF-8", "");
-
+          
               Log.i("texto",text.toString());
+              TextView newTxt = (TextView) findViewById(R.id.userInfoTextView);
+          		newTxt.setText(Html.fromHtml(text));
+          		userInfoTextView.setVisibility(View.VISIBLE);
          } catch (IOException e) {
              // TODO Auto-generated catch block
              e.printStackTrace();
