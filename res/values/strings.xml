@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">AppFbPrueba</string>
+    <string name="action_settings">Settings</string>
+    <string name="app_id">508819599163331</string>
+    <string name="hello_world">Este es un copy de prueba</string>
+    <string name="im_in">Este copy aparece cuando hemos instalado la app</string>
+    <string name="user_id"></string>
+    <string name="user_name"></string>
+    <string name="error_txt">Lo sentimos, pero ha ocurrido un error en la aplicación</string>
+
+</resources>

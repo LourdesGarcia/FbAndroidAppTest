@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:scrollbars="vertical" >
+
+    <TextView
+        android:id="@+id/textViewImIn"
+        android:layout_width="wrap_content"
+        android:layout_height="25sp"
+        android:text="@string/im_in" />
+
+    <TextView
+        android:id="@+id/textViewUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="25sp"
+        android:text="@string/user_name" />
+    
+    <TextView
+        android:id="@+id/textViewUserId"
+        android:layout_width="wrap_content"
+        android:layout_height="25sp"
+        android:text="@string/user_id" />
+
+    <Button
+        android:id="@+id/sendFriendsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Enviar a amigos" />
+
+    <Button
+        android:id="@+id/shareButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Compartir" />
+
+    <Button
+        android:id="@+id/postPhoto"
+        android:layout_width="121dp"
+        android:layout_height="wrap_content"
+        android:text="Post Photo" />
+
+    <Button
+        android:id="@+id/graphApiUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Graph Api User" />
+    
+    
+    <Button
+        android:id="@+id/postGraphApi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post Graph Api" />
+
+    <TextView
+        android:id="@+id/userInfoTextView"
+        android:layout_width="281dp"
+        android:layout_height="104dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0.49"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="12sp" />
+
+</LinearLayout>
