@@ -29,14 +29,19 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 import android.widget.Toast;
 
 import com.example.android.model.User;
@@ -477,7 +482,18 @@ public class MainActivity extends FragmentActivity  {
               Log.i("texto",text.toString());
               TextView newTxt = (TextView) findViewById(R.id.userInfoTextView);
           		newTxt.setText(Html.fromHtml(text));
+             // Spanned marked_up = Html.fromHtml(text);
+             //newTxt.setText(marked_up.toString(),BufferType.SPANNABLE);
+             // newTxt.setText( Html.toHtml(new SpannableString(text)));
           		userInfoTextView.setVisibility(View.VISIBLE);
+          		
+          		newTxt.setMovementMethod(LinkMovementMethod.getInstance());
+          		newTxt.setLinksClickable(true);
+          		WebView webview = new WebView(this);
+          		setContentView(webview);
+          		webview.getSettings().setJavaScriptEnabled(true);
+          		webview.loadDataWithBaseURL("file:///android_asset/www/prueba.html", text, "text/html", "UTF-8", null);
+          	
          } catch (IOException e) {
              // TODO Auto-generated catch block
              e.printStackTrace();
