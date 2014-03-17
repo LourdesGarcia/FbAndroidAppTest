@@ -26,6 +26,7 @@ import android.content.pm.Signature;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
@@ -81,6 +82,7 @@ public class MainActivity extends FragmentActivity  {
 	 private Button postPhoto;
 	 private Button goToHtmlButton;
 	 private TextView userInfoTextView;
+	 private String requestId;
 
 	 
 	 private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -131,13 +133,65 @@ public class MainActivity extends FragmentActivity  {
 	      }
     };
     
+    private void getRequestData(final String inRequestId) {
+        // Create a new request for an HTTP GET with the
+        // request ID as the Graph path.
+        Request request = new Request(Session.getActiveSession(), 
+                inRequestId, null, HttpMethod.GET, new Request.Callback() {
+
+                    @Override
+                    public void onCompleted(Response response) {
+                        // Process the returned response
+                        GraphObject graphObject = response.getGraphObject();
+                        FacebookRequestError error = response.getError();
+                        // Default message
+                        String message = "Incoming request";
+                        if (graphObject != null) {
+                            // Check if there is extra data
+                            if (graphObject.getProperty("data") != null) {
+                                try {
+                                    // Get the data, parse info to get the key/value info
+                                    JSONObject dataObject = 
+                                    new JSONObject((String)graphObject.getProperty("data"));
+                                    // Get the value for the key - badge_of_awesomeness
+                                    String badge = 
+                                        dataObject.getString("badge_of_awesomeness");
+                                    // Get the value for the key - social_karma
+                                    String karma = 
+                                        dataObject.getString("social_karma");
+                                    // Get the sender's name
+                                    JSONObject fromObject = 
+                                        (JSONObject) graphObject.getProperty("from");
+                                    String sender = fromObject.getString("name");
+                                    String title = sender+" sent you a gift";
+                                    // Create the text for the alert based on the sender
+                                    // and the data
+                                    message = title + "\n\n" + 
+                                        "Badge: " + badge + 
+                                        " Karma: " + karma;
+                                } catch (JSONException e) {
+                                    message = "Error getting request info";
+                                }
+                            } else if (error != null) {
+                                message = "Error getting request info";
+                            }
+                        }
+                        Toast.makeText(getApplicationContext(),
+                                message,
+                                Toast.LENGTH_LONG).show();
+                    }
+            });
+        // Execute the request asynchronously.
+        Request.executeBatchAsync(request);
+    }
+    
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-    	 if (state.isOpened()) {
+    	getRequestData(requestId);
+    	 if (session.isOpened()) {
     		 //COMPROBACION DE PERMISOS ESPECIALES
     		 if (session.getPermissions().contains("publish_stream")) {
-    			 //Log.e(TAG, "Logged in...");
     			 Log.e(TAG, "Logged in...");
-	         	setContentView(R.layout.activity_ok);   
+	         	setContentView(R.layout.activity_ok);  
 		        Request request = Request.newMeRequest(session, new Request.GraphUserCallback() {
 		            @Override
 		            public void onCompleted(GraphUser user, Response response) {
@@ -211,7 +265,7 @@ public class MainActivity extends FragmentActivity  {
 	        	session.requestNewPublishPermissions(new Session.NewPermissionsRequest(MainActivity.this, "publish_actions"));
 	        }
 
-	    } else if (state.isClosed()) {
+	    } else if (session.isClosed()) {
 	        Log.e(TAG, "Logged out...");
 	    }
     }
@@ -499,11 +553,6 @@ public class MainActivity extends FragmentActivity  {
              e.printStackTrace();
          }
   
-    	//Log.i(TAG,"hola");
-    	////Document doc = Jsoup.connect("http://en.wikipedia.org/").get();
-    	//File input = new File("/assets/prueba.html");
-    	//Log.i("archivo_html", input.toString());
-    	//Document doc = Jsoup.parse(input, "UTF-8");
     }
     
     
@@ -522,7 +571,15 @@ public class MainActivity extends FragmentActivity  {
             	publishShareDialog();
             }
         });
-
+        Uri intentUri =  getIntent().getData();
+        if (intentUri != null) {
+            String requestIdParam = intentUri.getQueryParameter("request_ids");
+            if (requestIdParam != null) {
+                String array[] = requestIdParam.split(",");
+                requestId = array[0];
+                Log.i(TAG, "Request id: "+requestId);
+            }
+        }
     }
 
 
@@ -552,6 +609,7 @@ public class MainActivity extends FragmentActivity  {
         // uiHelper.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
     }
+    
 
     @Override
     public void onPause() {
