@@ -335,7 +335,9 @@ public class MainActivity extends FragmentActivity  {
     private void sendFriendsDialog(){
       	 Bundle params = new Bundle();
  	    params.putString("message", "Learn how to make your Android apps social");
-
+ 	    params.putString("data",
+ 		        "{\"badge_of_awesomeness\":\"1\"," +
+ 		        "\"social_karma\":\"5\"}");
  	    WebDialog requestsDialog = (
  	        new WebDialog.RequestsDialogBuilder(this,
  	            Session.getActiveSession(),
